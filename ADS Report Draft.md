@@ -4,7 +4,7 @@ RotaJakiro ADS Report
 
 ## Goal
 
-Detect attempts to install the RotaJakiro backdoor on Linux hosts by looking for a droppped `systemd` services.
+Detect attempts to install the RotaJakiro backdoor on Linux hosts by looking for a dropped `systemd` services.
 
 ## Categorization
 
@@ -66,11 +66,13 @@ systemctl start sys-temd-agent.service
 
 The detection should alert on the generated systemd service.
 
-An example detection alerts on the folowing search in Splunk: 
+An example detection alerts on the following search in Splunk: 
 
 ```
 host="rocky-detection-test" sourcetype="journald" sys-temd-agent.service
 ```
+
+**ADD SCREENSHOT OF SPLUNK**
 
 This search will alert every time the sys-temd-agent.service string appears in the journald log, so it is quite noisy right now.
 
@@ -82,14 +84,14 @@ This search will alert every time the sys-temd-agent.service string appears in t
 Detection engineers may clean up from validating the detection against their environment by doing the following steps:
 
 On the test system:
-1. Disable the sys-temd-agent.service using `systemctl` 
-2. Remove the sys-temd-agent.service file from the filesystem
+1. Disable the sys-temd-agent.service using `systemctl`.
+2. Remove the sys-temd-agent.service file from the filesystem.
 3. Execute `systemctl daemon-reload` to tell systemd that the services defined on the system have changed.
 4. If it was set up for this test, remove the Splunk Universal Forwarder from the system (Using the RPM package, it will be installed in the `/opt/splunkforwarder` directory by default).
 
 On the Splunk instance:
-1. Remove any alerts defined in the Search and Reporting app
-2. If it was set up specifically for this test, remove the receiving rule from Settings > Forwarding and receiving > Configure receiving 
+1. Remove any alerts defined in the Search and Reporting app.
+2. If it was set up specifically for this test, remove the receiving rule from Settings > Forwarding and receiving > Configure receiving.
 3. If a separate index was used for this test, remove the index from your Splunk Enterprise or Splunk Cloud environment.
 
 ## Priority
@@ -99,11 +101,11 @@ Since this is a backdoor with a variety of features, any true positive alerts fi
 ## Response
 
 The following steps should be taken immediately upon a true positive alert:
-  * Remove the system from the network
+  * Remove the system from the network.
   * Disable the systemd service using `systemctl` to prevent it from running at boot, then stop the service. Alternatively, the system can simply be restarted. 
     * Depending on the security requirements of your environment, you may consider deleting the service file from the filesystem.
   * Kill the systemd-daemon binary if it is actively running.
-    * Again, depending on your environment, the binary can be removed now as well
+    * Again, depending on your environment, the binary can be removed now as well.
   * Escalate to a security incident after the immediate threat has been removed.
 
 ## Additional Resources
@@ -121,4 +123,4 @@ DELETE BEFORE SUBMISSION: [GitHub Markdown Reference ](https://docs.github.com/e
 
 [^5]: [Backdoor.Linux.ROTAJAKIRO.A](https://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/backdoor.linux.rotajakiro.a/) 
 
-[]: [Palantir ADS Framework Blog Post](https://blog.palantir.com/alerting-and-detection-strategy-framework-52dc33722df2) 
+[^6]: [Palantir ADS Framework Blog Post](https://blog.palantir.com/alerting-and-detection-strategy-framework-52dc33722df2) 
