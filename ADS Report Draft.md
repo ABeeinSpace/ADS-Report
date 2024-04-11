@@ -110,9 +110,6 @@ The following steps should be taken immediately upon a true positive alert:
 
 ## Additional Resources
 
-DELETE BEFORE SUBMISSION: [GitHub Markdown Reference ](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#links)
-
-
 [^1]: Shell script originally published by [Atomic Red Team](https://atomicredteam.io/privilege-escalation/T1543.002/#atomic-test-1---create-systemd-service). I removed the templates and added the path to the systemd service location and name of the systemd service.
 
 [^2]: [Arch boot process - Arch Wiki](https://wiki.archlinux.org/title/Arch_boot_process)
