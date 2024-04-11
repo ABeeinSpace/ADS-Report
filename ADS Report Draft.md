@@ -74,7 +74,6 @@ host="rocky-detection-test" sourcetype="journald" sys-temd-agent.service
 
 ![Splunk screenshot showing the example rule](https://github.com/ABeeinSpace/ADS-Report/assets/48869372/43f90beb-e214-474b-a89e-94b386ef7956)
 
-
 This search will alert every time the sys-temd-agent.service string appears in the journald log, so it is quite noisy right now.
 
 > Note:
