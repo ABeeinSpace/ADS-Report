@@ -72,7 +72,6 @@ An example detection alerts on the following search in Splunk:
 host="rocky-detection-test" sourcetype="journald" sys-temd-agent.service
 ```
 
-**ADD SCREENSHOT OF SPLUNK**
 ![Splunk screenshot showing the example rule](https://github.com/ABeeinSpace/ADS-Report/assets/48869372/43f90beb-e214-474b-a89e-94b386ef7956)
 
 
