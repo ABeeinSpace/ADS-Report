@@ -8,13 +8,13 @@ Detect attempts to install the RotaJakiro backdoor on Linux hosts by looking for
 
 ## Categorization
 
-These attempts are categorized under [Persistence / Create or Modify System Process / Systemd service](https://attack.mitre.org/techniques/T1543/002).
+These attempts are categorized under [Persistence / Create or Modify System Process / Systemd service](https://attack.mitre.org/techniques/T1543/002)[^3].
 
 ## Strategy Abstract
 Strategies for defending against this threat should go as follows:
 
 * Use endpoint monitoring and protection tooling to monitor services or processes running on a Linux host.
-* Look for specific service names or processes known to be used by RotaJakiro
+* Look for specific service names or processes known to be used by RotaJakiro[^4]
   * sys-temd-agent.service
   * gvfsd-helper
   * systemd-daemon
@@ -22,7 +22,7 @@ Strategies for defending against this threat should go as follows:
 
 ## Technical Context
 
-Most modern Linux systems use a project called `systemd` as their init system and services manager. `systemd` services are background programs that run to support different functionality. An example of a program that runs as a service is `sshd`, the OpenSSH Server daemon.
+Most modern Linux systems use a project called `systemd` as their init system and services manager[^2]. `systemd` services are background programs that run to support different functionality. An example of a program that runs as a service is `sshd`, the OpenSSH Server daemon.
 
 There are two directories that `systemd` will look for services in. 
 
@@ -35,7 +35,7 @@ A `systemd` service can technically be used to automatically launch any software
 
 We assume the system uses systemd. Linux systems using other methods of init are not applicable for the ADS discussed here.
 
-We assume RotaJakiro is running as root. If the backdoor is running as a normal user, it makes use of XDG Autostart (under a graphical environment) or .bashrc for users running without a desktop environment.
+We assume RotaJakiro is running as root. If the backdoor is running as a normal user, it makes use of XDG Autostart (under a graphical environment) or .bashrc for users running without a desktop environment.[^5]
 
 Unix systems, such as FreeBSD, do not use systemd. As such, the strategy discussed here is not applicable to those systems.
 
@@ -46,7 +46,7 @@ This alert may cause false positives for systems running the GNOME Desktop Envir
 ## Validation
 
 ### Validating the Detection
-Validation can be performed by executing the provided shell script to generate a systemd service in the /etc/systemd/system directory.
+Validation can be performed by executing the provided shell script[^1] to generate a systemd service in the /etc/systemd/system directory.
 
 ```bash
 echo "[Unit]" > /etc/systemd/system/sys-temd-agent.service
@@ -122,5 +122,3 @@ DELETE BEFORE SUBMISSION: [GitHub Markdown Reference ](https://docs.github.com/e
 [^4]: [RotaJakiro: A long live secret backdoor with 0 VT detection](https://blog.netlab.360.com/stealth_rotajakiro_backdoor_en/)
 
 [^5]: [Backdoor.Linux.ROTAJAKIRO.A](https://www.trendmicro.com/vinfo/us/threat-encyclopedia/malware/backdoor.linux.rotajakiro.a/) 
-
-[^6]: [Palantir ADS Framework Blog Post](https://blog.palantir.com/alerting-and-detection-strategy-framework-52dc33722df2) 
